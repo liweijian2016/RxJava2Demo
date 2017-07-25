@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void accept(Throwable throwable) throws Exception {
                 if (throwable instanceof InterruptedIOException) {
-                    Log.d(TAG, "Io interrupted");
+                    Log.d(TAG, "Io interrupted"); // lwj
                 }
             }
         });
