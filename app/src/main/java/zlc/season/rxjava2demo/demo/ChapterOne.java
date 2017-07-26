@@ -7,6 +7,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 import static zlc.season.rxjava2demo.MainActivity.TAG;
@@ -145,8 +146,10 @@ public class ChapterOne {
                 emitter.onNext(2);
                 Log.d(TAG, "emit 3");
                 emitter.onNext(3);
-                Log.d(TAG, "emit complete");
-                emitter.onComplete();
+//                Log.d(TAG, "emit complete");
+//                emitter.onComplete();
+                Log.d(TAG, "emit error");
+                emitter.onError(new Throwable("fake error"));
                 Log.d(TAG, "emit 4");
                 emitter.onNext(4);
             }
@@ -154,6 +157,22 @@ public class ChapterOne {
             @Override
             public void accept(Integer integer) throws Exception {
                 Log.d(TAG, "onNext: " + integer);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.d(TAG, "onError: " + throwable.getMessage());
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+                // onComplete
+                Log.d(TAG, "onComplete: ");
+            }
+        }, new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) throws Exception {
+                Log.d(TAG, "onSubscribe: ");
             }
         });
     }

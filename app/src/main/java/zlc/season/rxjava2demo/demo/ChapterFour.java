@@ -199,6 +199,16 @@ public class ChapterFour {
                 Log.d(TAG, "emit C");
                 emitter.onNext("C");
                 Thread.sleep(1000);
+/*
+
+                Log.d(TAG, "emit D");
+                emitter.onNext("D");
+                Thread.sleep(1000);
+
+                Log.d(TAG, "emit E");
+                emitter.onNext("E");
+                Thread.sleep(1000);
+*/
 
                 Log.d(TAG, "emit complete2");
                 emitter.onComplete();

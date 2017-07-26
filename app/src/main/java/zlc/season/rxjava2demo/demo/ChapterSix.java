@@ -41,14 +41,16 @@ public class ChapterSix {
     }
 
     public static void demo2() {
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                for (int i = 0; ; i++) {
-                    emitter.onNext(i);
-                }
-            }
-        }).subscribeOn(Schedulers.io())
+        Observable
+                .create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                        for (int i = 0; ; i++) {
+                            emitter.onNext(i);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
                 .filter(new Predicate<Integer>() {
                     @Override
                     public boolean test(Integer integer) throws Exception {

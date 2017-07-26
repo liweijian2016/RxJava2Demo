@@ -94,20 +94,24 @@ public class ChapterTwo {
                 .doOnNext(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-                        Log.d(TAG, "After observeOn(mainThread), current thread is: " + Thread.currentThread()
-                                .getName());
+                        Log.d(TAG, "After observeOn(mainThread), current thread is: " +
+                                Thread.currentThread().getName());
+                        Log.d(TAG, "onNext: " + integer);
                     }
                 })
                 .observeOn(Schedulers.io())
                 .doOnNext(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-                        Log.d(TAG, "After observeOn(io), current thread is : " + Thread.currentThread().getName());
+                        Log.d(TAG, "After observeOn(io), current thread is : " +
+                                Thread.currentThread().getName());
+                        Log.d(TAG, "onNext: " + integer);
                     }
                 })
                 .subscribe(consumer);
     }
 
+    // 测试不成,  java.lang.IllegalArgumentException: Missing either @GET URL or @Url parameter.
     public static void practice1(final Context context) {
         Api api = RetrofitProvider.get().create(Api.class);
         api.login(new LoginRequest())
