@@ -213,7 +213,8 @@ public class ChapterNine {
                     @Override
                     public void subscribe(FlowableEmitter<String> emitter) throws Exception {
                         try {
-                            FileReader reader = new FileReader("test.txt");
+//                            FileReader reader = new FileReader("test.txt");
+                            FileReader reader = new FileReader("assets/test");
                             BufferedReader br = new BufferedReader(reader);
 
                             String str;

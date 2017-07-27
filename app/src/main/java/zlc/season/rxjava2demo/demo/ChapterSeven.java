@@ -191,7 +191,9 @@ public class ChapterSeven {
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
                 for (int i = 0; i < 129; i++) {
                     Log.d(TAG, "emit " + i);
-                    emitter.onNext(i);
+                    if (emitter.requested() != 0) {
+                        emitter.onNext(i);
+                    }
                 }
             }
         }, BackpressureStrategy.ERROR);
@@ -201,8 +203,8 @@ public class ChapterSeven {
             @Override
             public void onSubscribe(Subscription s) {
                 Log.d(TAG, "onSubscribe");
+                s.request(Long.MAX_VALUE); // 异步操作,所以这行设置无用.
                 mSubscription = s;
-                s.request(Long.MAX_VALUE);
             }
 
             @Override

@@ -68,6 +68,7 @@ public class ChapterEight {
             @Override
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
                 for (int i = 0; ; i++) {
+                    Log.d(TAG, "emit " + i);
                     emitter.onNext(i);
                 }
             }
@@ -98,11 +99,17 @@ public class ChapterEight {
                 });
     }
 
+    /**
+     * onNext: 223
+     * Drops the most recent onNext value if the downstream can't keep up.
+     * 内存占用较低.---->5M左右.
+     */
     public static void demo3() {
         Flowable.create(new FlowableOnSubscribe<Integer>() {
             @Override
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 100000; i++) { //
+                    Log.d(TAG, "emit " + i);
                     emitter.onNext(i);
                 }
             }
@@ -134,11 +141,17 @@ public class ChapterEight {
                 });
     }
 
+    /**
+     * onNext: 223
+     * onNext: 9999
+     * 最后的一个事件会保存.
+     */
     public static void demo4() {
         Flowable.create(new FlowableOnSubscribe<Integer>() {
             @Override
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 100000; i++) { //
+                    Log.d(TAG, "emit " + i);
                     emitter.onNext(i);
                 }
             }
@@ -170,6 +183,9 @@ public class ChapterEight {
                 });
     }
 
+    /**
+     * 全部保留下来了.
+     */
     public static void demo5() {
         Flowable.create(new FlowableOnSubscribe<Integer>() {
             @Override
@@ -206,6 +222,10 @@ public class ChapterEight {
                 });
     }
 
+    /**
+     * TimeUnit.MICROSECONDS    : 每隔1 微秒上游发送一个消息,downStream如果不sleep,就会接收过快
+     * TimeUnit.SECONDS         : 每隔1秒一条消息,从上游控制了流速不均衡的问题.
+     */
     public static void demo6() {
         Flowable.interval(1, TimeUnit.MICROSECONDS)
                 .onBackpressureDrop()
@@ -241,17 +261,28 @@ public class ChapterEight {
     }
 
 
+    /**
+     * 两次设置 BackpressureStrategy 第二次的起作用.
+     * onError:
+     * Missing  : io.reactivex.exceptions.MissingBackpressureException: Queue is full?!
+     * Error    : io.reactivex.exceptions.MissingBackpressureException: create: could not emit value due to lack of requests
+     * Buffer   : 内存爆满.
+     * Drop     : 正常.
+     * Latest   : 正常.内存极低.
+     * .onBackpressureDrop() 优先级更高.比起在前面设置策略.
+     */
     public static void demo7() {
         Flowable.create(new FlowableOnSubscribe<Integer>() {
             @Override
             public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
                 for (int i = 0; ; i++) {
-                    Log.d(TAG, "emit " + i);
+//                    Log.d(TAG, "emit " + i);
                     emitter.onNext(i);
                 }
             }
-        }, BackpressureStrategy.MISSING).subscribeOn(Schedulers.io())
-                .onBackpressureBuffer()
+        }, BackpressureStrategy.BUFFER).subscribeOn(Schedulers.io())
+                .onBackpressureDrop()
+//                .onBackpressureBuffer()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Integer>() {
 
@@ -259,6 +290,7 @@ public class ChapterEight {
                     public void onSubscribe(Subscription s) {
                         Log.d(TAG, "onSubscribe");
                         mSubscription = s;
+                        s.request(Long.MAX_VALUE);
                     }
 
                     @Override

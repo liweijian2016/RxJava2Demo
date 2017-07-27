@@ -28,6 +28,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="REQUEST"/>
+    <Button
+        android:id="@+id/demo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Demo2"/>
+
 
     <Button
         android:id="@+id/demo3"
@@ -44,5 +52,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="Demo4"/>
+
+    <Button
+        android:id="@+id/demo5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Demo5"/>
+
+    <Button
+        android:id="@+id/demo6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Demo6"/>
+
 
 </LinearLayout>
